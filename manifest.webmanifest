@@ -1,0 +1,19 @@
+{
+  "name": "KalCal Thai — นับแคลอรีและโปรตีน",
+  "short_name": "KalCal Thai",
+  "description": "บันทึกแคลอรี โปรตีน และอาหารประจำวัน",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f7f5",
+  "theme_color": "#f36b3f",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "th"
+}

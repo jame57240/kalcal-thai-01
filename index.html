@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f36b3f">
+  <meta name="description" content="KalCal Thai — บันทึกแคลอรี โปรตีน และอาหารประจำวัน">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="stylesheet" href="./styles.css">
+  <title>KalCal Thai — นับแคลอรีและโปรตีน</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">🥗</div>
+    <div class="brand-copy"><div class="brand">KalCal <span>THAI</span></div><div class="tagline">กินเป็น · นับง่าย · ไปถึงเป้าหมาย</div></div>
+    <button id="installBtn" class="icon-button hidden" aria-label="ติดตั้งแอป">＋</button>
+  </header>
+
+  <nav class="tabs" aria-label="เมนูหลัก">
+    <button class="tab active" data-tab="today">วันนี้</button>
+    <button class="tab" data-tab="food">เพิ่มอาหาร</button>
+    <button class="tab" data-tab="scan">สแกน</button>
+    <button class="tab" data-tab="photo">รูปอาหาร AI</button>
+    <button class="tab" data-tab="profile">โปรไฟล์</button>
+  </nav>
+
+  <main>
+    <section id="today" class="page active">
+      <div class="page-heading"><div><p class="eyebrow">DAILY DASHBOARD</p><h1>สรุปโภชนาการวันนี้ 👋</h1></div><div id="todayDate" class="date-pill"></div></div>
+      <article class="calorie-card">
+        <div class="card-label">แคลอรีที่รับประทาน</div>
+        <div class="calorie-line"><strong id="totalKcal">0</strong><span>/ <b id="goalKcalLabel">2,000</b> kcal</span></div>
+        <div class="progress"><div id="kcalProgress" class="progress-fill"></div></div>
+        <div class="remaining"><span>เหลืออีก</span><strong id="remainingKcal">2,000 kcal</strong><span>ตามเป้าหมาย</span></div>
+      </article>
+      <article class="panel">
+        <div class="panel-title"><h2>สารอาหารหลัก</h2><span class="small-muted">วันนี้</span></div>
+        <div class="macro">
+          <div class="macro-head"><span><i class="dot green"></i>โปรตีน</span><b id="proteinText">0 / 130 g</b></div>
+          <div class="progress light"><div id="proteinProgress" class="progress-fill green-fill"></div></div>
+        </div>
+        <div class="macro-grid">
+          <div class="macro-tile"><span><i class="dot yellow"></i>คาร์บ</span><strong id="carbsText">0 g</strong></div>
+          <div class="macro-tile"><span><i class="dot blue"></i>ไขมัน</span><strong id="fatText">0 g</strong></div>
+        </div>
+      </article>
+      <div class="section-row"><h2>อาหารที่บันทึก</h2><span id="logCount" class="small-muted">0 รายการ</span></div>
+      <div id="foodLog" class="food-log"></div>
+      <p class="disclaimer">ข้อมูลโภชนาการเป็นค่าประมาณ ขึ้นกับสูตรอาหาร ปริมาณ และวิธีปรุง</p>
+    </section>
+
+    <section id="food" class="page">
+      <p class="eyebrow">FOOD DATABASE</p><h1>ค้นหาอาหาร</h1>
+      <label class="search-box"><span>⌕</span><input id="foodSearch" type="search" placeholder="เช่น ข้าวกะเพรา ไข่ต้ม อกไก่" autocomplete="off"></label>
+      <p class="helper">เลือกเมนูเพื่อบันทึก 1 หน่วยบริโภค • เพิ่มอาหารเองได้ด้านล่าง</p>
+      <div id="foodResults" class="results"></div>
+      <article class="panel">
+        <h2>เพิ่มอาหารเอง</h2>
+        <form id="customFoodForm" class="form-grid">
+          <label class="full">ชื่ออาหาร<input id="customName" required placeholder="เช่น ข้าวไข่เจียว"></label>
+          <label>แคลอรี (kcal)<input id="customKcal" type="number" min="0" required placeholder="450"></label>
+          <label>โปรตีน (g)<input id="customProtein" type="number" min="0" step="0.1" required placeholder="15"></label>
+          <label>คาร์บ (g)<input id="customCarbs" type="number" min="0" step="0.1" value="0"></label>
+          <label>ไขมัน (g)<input id="customFat" type="number" min="0" step="0.1" value="0"></label>
+          <button class="primary full" type="submit">＋ บันทึกอาหารและเพิ่มเข้าวันนี้</button>
+        </form>
+      </article>
+    </section>
+
+    <section id="scan" class="page">
+      <p class="eyebrow">BARCODE LOOKUP</p><h1>สแกนบาร์โค้ด</h1>
+      <article class="panel scan-panel">
+        <div class="scan-symbol">▦</div><h2>สแกนฉลากสินค้า</h2>
+        <p class="helper">ค้นหาข้อมูลสินค้าจาก Open Food Facts ถ้ามีข้อมูลในฐาน</p>
+        <button id="startScan" class="primary">เปิดกล้องสแกน</button>
+        <video id="scannerVideo" class="scanner-video hidden" playsinline></video>
+        <div id="scanStatus" class="status-message" role="status"></div>
+        <button id="stopScan" class="secondary hidden">ปิดกล้อง</button>
+      </article>
+      <article class="panel">
+        <h2>กรอกรหัสบาร์โค้ดเอง</h2>
+        <form id="barcodeForm" class="inline-form"><input id="barcodeInput" inputmode="numeric" placeholder="เช่น 885..." aria-label="รหัสบาร์โค้ด"><button class="primary" type="submit">ค้นหา</button></form>
+      </article>
+      <div id="barcodeResult"></div>
+      <p class="disclaimer">สินค้าบางรายการไม่มีข้อมูล หรือข้อมูลโภชนาการไม่ครบ ตรวจสอบกับฉลากจริงก่อนบันทึก</p>
+    </section>
+
+    <section id="photo" class="page">
+      <p class="eyebrow">AI FOOD ESTIMATE</p><h1>ประเมินอาหารจากรูป</h1>
+      <article class="panel photo-panel">
+        <div id="photoPreview" class="photo-preview"><span>📸</span><p>ถ่ายหรือเลือกรูปอาหารของคุณ</p></div>
+        <input id="photoInput" type="file" accept="image/*" capture="environment" class="hidden">
+        <div class="button-row"><button id="takePhoto" class="primary">ถ่าย / เลือกรูป</button><button id="analyzePhoto" class="secondary" disabled>ให้ AI วิเคราะห์</button></div>
+        <div id="aiStatus" class="status-message" role="status"></div>
+      </article>
+      <article class="notice"><strong>สถานะต้นแบบ</strong><p>การถ่าย/เลือกรูปใช้งานได้ แต่การวิเคราะห์ภาพจริงต้องเชื่อมต่อ backend และบริการ AI ก่อนเปิดใช้ เราไม่ใส่ API key ไว้ในโค้ดหน้าเว็บเพื่อป้องกันการรั่วไหล</p></article>
+    </section>
+
+    <section id="profile" class="page">
+      <p class="eyebrow">YOUR GOALS</p><h1>โปรไฟล์และเป้าหมาย</h1>
+      <article class="panel">
+        <form id="goalForm" class="form-grid">
+          <label>ชื่อที่ใช้แสดง<input id="displayName" placeholder="เช่น เจม"></label>
+          <label>น้ำหนัก (กก.)<input id="weight" type="number" min="1" step="0.1" placeholder="73"></label>
+          <label>เป้าหมายแคลอรี/วัน<input id="goalKcal" type="number" min="500" max="10000" required></label>
+          <label>เป้าหมายโปรตีน/วัน (g)<input id="goalProtein" type="number" min="1" max="500" required></label>
+          <button class="primary full" type="submit">บันทึกเป้าหมาย</button>
+        </form>
+      </article>
+      <article class="panel">
+        <h2>ข้อมูลในอุปกรณ์นี้</h2>
+        <p class="helper">ต้นแบบนี้เก็บข้อมูลในเบราว์เซอร์เครื่องนี้ ยังไม่มีระบบสมาชิกหรือซิงก์ข้ามเครื่อง</p>
+        <div class="button-row"><button id="exportData" class="secondary">ส่งออกข้อมูล</button><button id="clearData" class="danger">ล้างข้อมูล</button></div>
+      </article>
+      <article class="notice"><strong>ก่อนเปิดให้เพื่อนใช้</strong><p>ต้องเพิ่มระบบสมัครสมาชิก ฐานข้อมูลออนไลน์ การแยกข้อมูลแต่ละบัญชี และนโยบายความเป็นส่วนตัวก่อน ข้อมูลในเครื่องนี้ยังไม่ใช่บัญชีส่วนตัวที่ปลอดภัยสำหรับบริการสาธารณะ</p></article>
+    </section>
+  </main>
+
+  <footer><span>KalCal Thai</span><span>เวอร์ชันทดลอง · โภชนาการโดยประมาณ</span></footer>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
